@@ -74,11 +74,11 @@
 						<input type="hidden" name="_method" value="put" th:if="${emp!=null}"/>
 						<div class="form-group">
 							<label>教工号</label>
-							<input name="id" type="text" class="form-control" placeholder="2017xxxxxxxx" th:value="${emp!=null}?${emp.id}">
+							<input name="id" type="text" class="form-control" required="" placeholder="2017xxxxxxxx" th:value="${emp!=null}?${emp.id}">
 						</div>
 						<div class="form-group">
 							<label>姓名</label>
-							<input name="name" type="text" class="form-control" placeholder="张三" th:value="${emp!=null}?${emp.name}">
+							<input name="name" type="text" class="form-control" required="" placeholder="张三" th:value="${emp!=null}?${emp.name}">
 						</div>
 						<div class="form-group">
 							<label>学院</label>
@@ -98,13 +98,13 @@
 								<option>外国语学院</option>
 								<option>体育学院</option>
 								<option>艺术学院</option>
-								<option>外国语学院</option>
+								<option>外国语学院</option>2W1
 								<option>地球科学与技术学院</option>
 							</select>
 						</div>
 						<div class="form-group">
 							<label>身份证号</label>
-							<input name="idNum" type="text" class="form-control" placeholder="" th:value="${emp!=null}?${emp.idNum}">
+							<input name="idNum" type="text" required="" class="form-control" placeholder="" th:value="${emp!=null}?${emp.idNum}">
 						</div>
 						<button type="submit" class="btn btn-primary" th:text="${emp!=null}?'修改':'添加'">添加</button>
 					</form>

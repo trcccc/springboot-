@@ -54,12 +54,14 @@
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <div class="form-inline" >
+                <div><label for="exampleInput">学号</label></div>
+                <div class="col px-md-1">
 
-                <label for="exampleInput">学号</label>
-                <form th:action="@{/select/fam}" method="post">
-                    <input name="id" type="text" class="form-control" id="exampleInput" >
-                    <button class="btn btn-sm btn-primary" type="submit" >查看</button>
-                </form>
+                    <form th:action="@{/select/fam}" method="post">
+                        <input name="id" type="text" class="form-control" id="exampleInput" >
+                        <button class="btn btn-sm btn-primary" type="submit" >查看</button>
+                    </form></div>
+
 
                 <!--                    <button class="btn btn-sm btn-primary" type="submit" >查询</button>-->
 
@@ -79,7 +81,7 @@
                         <th>编号</th>
                         <th>姓名</th>
                         <th>身份证号</th>
-
+                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>

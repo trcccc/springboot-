@@ -55,8 +55,8 @@
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <div class="form-inline" >
 
-                <label for="exampleInput">教工号</label>
-                <form th:action="@{/select/tea}" method="post">
+                <div><label for="exampleInput">教工号</label></div>
+                <div class="col px-md-1"><form th:action="@{/select/tea}" method="post">
                     <input name="id" type="text" class="form-control" id="exampleInput" >
 
                     <select class="form-control" name="department">
@@ -80,7 +80,8 @@
                     </select>
 
                     <button class="btn btn-sm btn-primary" type="submit" >查看</button>
-                </form>
+                </form></div>
+
 
                 <!--                    <button class="btn btn-sm btn-primary" type="submit" >查询</button>-->
 
@@ -101,6 +102,7 @@
                         <th>姓名</th>
                         <th>学院</th>
                         <th>身份证号</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>

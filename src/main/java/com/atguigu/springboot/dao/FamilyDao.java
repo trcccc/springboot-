@@ -55,6 +55,11 @@ public class FamilyDao {
         return result;
     }
 
+    public int changepsw(Family family,String psw){
+        String sql = "UPDATE family SET psw=? WHERE ID = ?";
+        int result = jdbcTemplate.update(sql, psw,family.getId());
+        return result;
+    }
     public Family findById(String id) {
         String sql = "select * from family where id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new RowMapper<Family>() {

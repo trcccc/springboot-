@@ -86,6 +86,7 @@ public class Student {
             ", college='" + college + '\'' +
             ", specialty=" + specialty +
             ", idNum=" + idNum +
+            ", psw=" + psw +
             '}';
   }
 

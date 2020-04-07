@@ -21,8 +21,8 @@ public class StudentDao {
     private JdbcTemplate jdbcTemplate;
 
     public int save(Student student){
-        String sql = "INSERT INTO student (ID,name,idNum,college,specialty) VALUES (?,?,?,?,?)";
-        Object args[] = {student.getId(),student.getName(),student.getIdNum(),student.getCollege(),student.getSpecialty()};
+        String sql = "INSERT INTO student (ID,name,idNum,college,specialty,psw) VALUES (?,?,?,?,?,?)";
+        Object args[] = {student.getId(),student.getName(),student.getIdNum(),student.getCollege(),student.getSpecialty(),student.getPsw()};
 
         return jdbcTemplate.update(sql, args);
     }
@@ -43,6 +43,12 @@ public class StudentDao {
     public int update(Student student) {
         String sql = "UPDATE student SET ID= ?,name = ?,idNum = ?,college= ?,specialty= ? WHERE ID = ?";
         int result = jdbcTemplate.update(sql, student.getId(),student.getName(),student.getIdNum(),student.getCollege(),student.getSpecialty(),student.getId());
+        return result;
+    }
+
+    public int changepsw(Student student,String psw){
+        String sql = "UPDATE student SET psw=? WHERE ID = ?";
+        int result = jdbcTemplate.update(sql, psw,student.getId());
         return result;
     }
 

@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -37,7 +34,7 @@ public class CardController {
     @Autowired
     RequestDao requestDao;
 
-
+    //查询信息
     @GetMapping("/stu1")
     public String student(Model model){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
@@ -74,7 +71,7 @@ public class CardController {
     }
 
 
-
+    //申请卡片
     @PostMapping("/stu2")
     public String addStu(@PathParam("id") String id, Request request, Map<String,Object>map, Model model){
         //来到学生卡列表
@@ -98,7 +95,7 @@ public class CardController {
     }
 
     @PostMapping("/tea2")
-    public String addTea(Request request, Map<String,Object>map){
+    public String addTea(@PathParam("id") String id,Request request, Map<String,Object>map, Model model){
         //来到学生卡列表
 
         System.out.println("保存的信息:"+request);
@@ -106,14 +103,19 @@ public class CardController {
         try {
             requestDao.save(request);
             map.put("msg", "提交成功，等待审批");
+            Teacher teacher=teacherDao.findById(id);
+            model.addAttribute("emp",teacher);
+
         }catch (Exception e){
             map.put("msg", "已提交，请耐心等待");
+            Teacher teacher=teacherDao.findById(id);
+            model.addAttribute("emp",teacher);
         }
 
         return "teacher";
     }
     @PostMapping("/fam2")
-    public String addFam(Request request, Map<String,Object>map){
+    public String addFam(@PathParam("id") String id,Request request, Map<String,Object>map, Model model){
         //来到学生卡列表
 
         System.out.println("保存的信息:"+request);
@@ -121,11 +123,114 @@ public class CardController {
         try {
             requestDao.save(request);
             map.put("msg", "提交成功，等待审批");
+            Family family=familyDao.findById(id);
+            model.addAttribute("emp",family);
         }catch (Exception e){
             map.put("msg", "已提交，请耐心等待");
+            Family family=familyDao.findById(id);
+            model.addAttribute("emp",family);
         }
 
         return "family";
     }
+
+    @GetMapping("/changepsw")
+    public String stuPsw(Model model){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+//已经拿到session,就可以拿到session中保存的用户信息了。
+        System.out.println(request.getSession().getAttribute("loginUser"));
+        String id=request.getSession().getAttribute("loginUser").toString();
+//        student.setPsw();
+
+
+        return "change";
+    }
+
+    @GetMapping("/changepswT")
+    public String teaPsw(Model model){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+//已经拿到session,就可以拿到session中保存的用户信息了。
+        System.out.println(request.getSession().getAttribute("loginUser"));
+        String id=request.getSession().getAttribute("loginUser").toString();
+//        student.setPsw();
+
+
+        return "changeTea";
+    }
+
+    @GetMapping("/changepswF")
+    public String famPsw(Model model){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+//已经拿到session,就可以拿到session中保存的用户信息了。
+        System.out.println(request.getSession().getAttribute("loginUser"));
+        String id=request.getSession().getAttribute("loginUser").toString();
+//        student.setPsw();
+
+
+        return "changeFam";
+    }
+
+
+    @PostMapping("/change")
+    public String changePsw(@RequestParam("newpsw") String psw,@RequestParam("renewpsw") String renewpsw,Model model,Map<String,Object>map){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String id=request.getSession().getAttribute("loginUser").toString();
+
+        try {
+            Student list=studentDao.findById(id);
+            list.setPsw(renewpsw);
+            if (psw.equals(renewpsw)){
+                studentDao.changepsw(list,renewpsw);
+                map.put("msg", "修改成功！");
+            }
+            else
+            {
+                map.put("msg", "先后输入密码不相同，请重新输入");
+            }
+            System.out.println(list);
+            return "change";
+        }
+        catch (Exception e){
+            try{
+                Teacher list=teacherDao.findById(id);
+                list.setPsw(renewpsw);
+                if (psw.equals(renewpsw)){
+                    teacherDao.changepsw(list,renewpsw);
+                    map.put("msg", "修改成功！");
+                }
+                else
+                {
+                    map.put("msg", "先后输入密码不相同，请重新输入");
+                }
+                System.out.println(list);
+                return "changeTea";
+            }
+            catch (Exception e1){
+                Family list=familyDao.findById(id);
+                list.setPsw(renewpsw);
+                if (psw.equals(renewpsw)){
+                    familyDao.changepsw(list,renewpsw);
+                    map.put("msg", "修改成功！");
+                }
+                else
+                {
+                    map.put("msg", "先后输入密码不相同，请重新输入");
+                }
+                System.out.println(list);
+                return "changeFam";
+
+            }
+
+        }
+
+
+
+
+
+
+
+
+    }
+
 
 }

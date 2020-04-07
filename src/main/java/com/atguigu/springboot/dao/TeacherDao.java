@@ -45,6 +45,12 @@ public class TeacherDao {
         int result = jdbcTemplate.update(sql, teacher.getId(),teacher.getName(),teacher.getIdNum(),teacher.getCollege(),teacher.getId());
         return result;
     }
+
+    public int changepsw(Teacher teacher,String psw){
+        String sql = "UPDATE teacher SET psw=? WHERE ID = ?";
+        int result = jdbcTemplate.update(sql, psw,teacher.getId());
+        return result;
+    }
     public List<Map<String, Object>>  findByDepartment(String department){
         String sql = "select * from teacher where college = ?";
 

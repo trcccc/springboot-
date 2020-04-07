@@ -79,8 +79,15 @@ public class EmplyeeController {
         try {
             Student list=studentDao.findById(id);
             model.addAttribute("emps1",list);
-            System.out.println(depa);
         }catch (Exception e){
+            System.out.println(depa);
+            if (depa.equals("全部"))
+            {
+                System.out.println("进入");
+                List<Map<String, Object>> list=studentDao.getAllStudents();
+                model.addAttribute("emps1",list);
+                return "emp/list";
+            }
 
             List<Map<String, Object>> list=studentDao.findByDepartment(depa);
             model.addAttribute("emps1",list);
@@ -96,6 +103,13 @@ public class EmplyeeController {
             model.addAttribute("emps2",list);
             System.out.println(list);
         }catch (Exception e){
+            if (depa.equals("全部"))
+            {
+                System.out.println("进入");
+                List<Map<String, Object>> list=teacherDao.getAllTeachers();
+                model.addAttribute("emps2",list);
+                return "emp/teacherlist";
+            }
             List<Map<String, Object>> list=teacherDao.findByDepartment(depa);
             model.addAttribute("emps2",list);
 
@@ -104,26 +118,26 @@ public class EmplyeeController {
         return "emp/teacherlist";
     }
     @PostMapping("/select/fam")
-    public String selectFam(@RequestParam("id") String id,@RequestParam("department") String depa,Model model){
+    public String selectFam(@RequestParam("id") String id,Model model){
         try {
             Family list=familyDao.findById(id);
             model.addAttribute("emps3",list);
             System.out.println(list);
         }catch (Exception e){
-            List<Map<String, Object>> list=familyDao.findByDepartment(depa);
+            List<Map<String, Object>> list=familyDao.getAll();
             model.addAttribute("emps3",list);
         }
 
         return "emp/familylist";
     }
     @PostMapping("/select/tem")
-    public String selectTem(@RequestParam("id") String id,@RequestParam("department") String depa,Model model){
+    public String selectTem(@RequestParam("id") String id,Model model){
         try {
             Temporary list=temporaryDao.findById(id);
             model.addAttribute("emps4",list);
             System.out.println(list);
         }catch (Exception e){
-            List<Map<String, Object>> list=temporaryDao.findByDepartment(depa);
+            List<Map<String, Object>> list=temporaryDao.getAll();
             model.addAttribute("emps4",list);
         }
 
@@ -165,8 +179,12 @@ public class EmplyeeController {
     @PostMapping("/emp1")
     public String addStu(Student student){
         //来到学生卡列表
+        if(student.getPsw()==null)
+        {
+            student.setPsw("123456");
+        }
 
-        System.out.println("保存的信息:"+student);
+        System.out.println("保存的信息:"+student.getPsw());
         //保存
         System.out.println(studentDao.save(student));
         return "redirect:/emps1";
@@ -359,13 +377,9 @@ public class EmplyeeController {
         return "redirect:/emps5";
     }
 
+    //修改密码
 
 
-//////查询学院
-//    @PostMapping("/emp")
-//    public String selectdepartmentfromstudent(@RequestParam("department") String id,Model model){
-//        System.out.println("部门为"+id);
-//        return "emp/list";
-//
-//    }
+
+
 }
