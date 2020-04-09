@@ -1,14 +1,8 @@
 package com.atguigu.springboot.controller;
 
 
-import com.atguigu.springboot.dao.FamilyDao;
-import com.atguigu.springboot.dao.RequestDao;
-import com.atguigu.springboot.dao.StudentDao;
-import com.atguigu.springboot.dao.TeacherDao;
-import com.atguigu.springboot.entities.Family;
-import com.atguigu.springboot.entities.Request;
-import com.atguigu.springboot.entities.Student;
-import com.atguigu.springboot.entities.Teacher;
+import com.atguigu.springboot.dao.*;
+import com.atguigu.springboot.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Controller;
@@ -33,6 +27,8 @@ public class CardController {
     FamilyDao familyDao;
     @Autowired
     RequestDao requestDao;
+    @Autowired
+    AdminDao adminDao;
 
     //查询信息
     @GetMapping("/stu1")
@@ -169,8 +165,19 @@ public class CardController {
 
         return "changeFam";
     }
+    @GetMapping("/changepswA")
+    public String admPsw(Model model){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+//已经拿到session,就可以拿到session中保存的用户信息了。
+        System.out.println(request.getSession().getAttribute("loginUser"));
+        String id=request.getSession().getAttribute("loginUser").toString();
+//        student.setPsw();
 
 
+        return "emp/changeAdm";
+    }
+
+//修改密码
     @PostMapping("/change")
     public String changePsw(@RequestParam("newpsw") String psw,@RequestParam("renewpsw") String renewpsw,Model model,Map<String,Object>map){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
@@ -206,18 +213,36 @@ public class CardController {
                 return "changeTea";
             }
             catch (Exception e1){
-                Family list=familyDao.findById(id);
-                list.setPsw(renewpsw);
-                if (psw.equals(renewpsw)){
-                    familyDao.changepsw(list,renewpsw);
-                    map.put("msg", "修改成功！");
+                try{
+                    Family list=familyDao.findById(id);
+                    list.setPsw(renewpsw);
+                    if (psw.equals(renewpsw)){
+                        familyDao.changepsw(list,renewpsw);
+                        map.put("msg", "修改成功！");
+                    }
+                    else
+                    {
+                        map.put("msg", "先后输入密码不相同，请重新输入");
+                    }
+                    System.out.println(list);
+                    return "changeFam";
                 }
-                else
+                catch (Exception e2)
                 {
-                    map.put("msg", "先后输入密码不相同，请重新输入");
+                    Admin list=adminDao.findById(id);
+                    list.setPsw(renewpsw);
+                    if (psw.equals(renewpsw)){
+                        adminDao.changepsw(list,renewpsw);
+                        map.put("msg", "修改成功！");
+                    }
+                    else
+                    {
+                        map.put("msg", "先后输入密码不相同，请重新输入");
+                    }
+                    System.out.println(list);
+                    return "emp/changeAdm";
                 }
-                System.out.println(list);
-                return "changeFam";
+
 
             }
 

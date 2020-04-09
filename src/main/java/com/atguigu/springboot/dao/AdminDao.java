@@ -30,4 +30,9 @@ public class AdminDao {
             }
         });
     }
+    public int changepsw(Admin admin,String psw){
+        String sql = "UPDATE admin SET psw=? WHERE ID = ?";
+        int result = jdbcTemplate.update(sql, psw,admin.getId());
+        return result;
+    }
 }
