@@ -63,7 +63,7 @@ public class LoginController {
 
                         model.addAttribute("emp",student);
                         System.out.println("调用成功"+student);
-                        return "/student";
+                        return "student";
 
                     }
                     else {
